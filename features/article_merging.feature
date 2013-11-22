@@ -11,15 +11,16 @@ Background:
     | testadmin  | admin     | admin@blog.com     | Blog Admin     | 1          |
   And the following articles exist:
     | title         | author        | body            | published |
-    | A first post  | First Author  | the first text  | true      |
-    | A second post | Second Author | the second text | true      |
+    | A first post  | Blog Publisher| the first text  | true      |
+    | A second post | Blog Admin    | the second text | true      |
 
-@javascript  @current
+
 Scenario: An admin-user can merge articles into one
 Given I am logged into the admin panel as "testadmin" with a password "admin"
 And I visit the the edit page for "A first post"
 Then I should see "Merge Articles"
 
+@current @javascript
 Scenario: A non-admin cannot see the option to merge articles
 Given I am logged into the admin panel as "non_admin" with a password "non_admin"
 And I visit the the edit page for "A first post"

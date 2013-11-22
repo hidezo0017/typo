@@ -12,7 +12,9 @@ Given(/^the following users exist:$/) do |users_table|
 end
 Given(/^the following articles exist:$/) do |articles_table|
   articles_table.hashes.each do |article|
+    user = User.find_by_name(article["author"])
     Article.create!({
+                     user_id: user.id,
                      title: article["title"],
                      author: article["author"],
                      body: article["body"],
