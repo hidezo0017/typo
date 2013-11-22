@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   match 'admin', :to  => 'admin/dashboard#index', :format => false, :as => :admin_dashboard
 
+
   match 'articles.:format', :to => 'articles#index', :constraints => {:format => 'rss'}, :as => 'rss'
   match 'articles.:format', :to => 'articles#index', :constraints => {:format => 'atom'}, :as => 'atom'
 
@@ -114,6 +115,9 @@ Rails.application.routes.draw do
 
   # default
   root :to  => 'articles#index', :format => false
+
+
+  match 'merge', :to  => 'admin/content#merge', :method => :put, as: :merge
 
   match '*from', :to => 'articles#redirect', :format => false
 end
