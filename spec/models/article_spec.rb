@@ -632,15 +632,31 @@ describe Article do
   end
 
   describe "merge similar articles" do
-    it "should merge two articles" do
-      article1 = Factory(:article, title: "first posted",
+    before do
+      @article1 = Factory(:article, title: "first posted",
                          body: "first content")
-      article2 = Factory(:article, title: "second posted",
-                        body: "second content")
+      @article2 = Factory(:article, title: "second posted",
+                         body: "second content")
+    end
+    it "should have the text of the merged article" do
+      Article.merge(@article1.id, @article2.id)
+      merged_article = Article.find_by_id(@article1.id)
+      merged_article.body.should be == @article1.body + "\n" + @article2.body
+    end
+    it "should have the comments of the merged article's comments" do
 
-      Article.merge(article1.id, article2.id)
-      merged_article = Article.find_by_id(article1.id)
-      merged_article.body.should be == article1.body + "\n" + article2.body
+      @comment1 = Factory(:comment)
+      @comment2 = Factory(:comment)
+
+      @article1.comments << @comment1
+      @article2.comments << @comment2
+
+      debugger
+      @article1.save!
+      @article2.save!
+      Article.merge(@article1.id, @article2.id)
+      merged_article = Article.find_by_id(@article1.id)
+      merged_article.comments.include?(@comment2).should be_true
     end
   end
 

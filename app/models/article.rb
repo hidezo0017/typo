@@ -471,6 +471,8 @@ class Article < Content
     article1 = Article.find_by_id(first_id)
     article2 = Article.find_by_id(second_id)
     article1.body += "\n" + article2.body
+    article1.comments << article2.comments
+    #debugger
     article1.save!
     article2.delete
   end
