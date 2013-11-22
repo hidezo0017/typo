@@ -630,5 +630,19 @@ describe Article do
     end
 
   end
+
+  describe "merge similar articles" do
+    it "should merge two articles" do
+      article1 = Factory(:article, title: "first posted",
+                         body: "first content")
+      article2 = Factory(:article, title: "second posted",
+                        body: "second content")
+
+      Article.merge(article1.id, article2.id)
+      merged_article = Article.find_by_id(article1.id)
+      merged_article.body.should be == article1.body + "\n" + article2.body
+    end
+  end
+
 end
 

@@ -469,8 +469,8 @@ describe Admin::ContentController do
       Factory(:blog)
       #TODO delete this after remove fixture
       Profile.delete_all
-      @user = Factory(:user, :text_filter => Factory(:markdown), :profile => Factory(:profile_admin, :label => Profile::ADMIN))
       @user.editor = 'simple'
+      @user = Factory(:user, :text_filter => Factory(:markdown), :profile => Factory(:profile_admin, :label => Profile::ADMIN))
       @user.save
       @article = Factory(:article)
       request.session = { :user => @user.id }
@@ -668,6 +668,19 @@ describe Admin::ContentController do
           response.should redirect_to(:action => 'index')
         end.should_not change(Article, :count)
       end
+
+    end
+  end
+  #saas hw1
+  describe 'merge similar articles' do
+    it 'should merge 2 articles into one', :javascript => true do
+      user = Factory(:user, :profile_id => 1)
+      request.session = { :user => user.id }
+      article1 = Factory(:article, user: user, body: "content1")
+      article2 = Factory(:article, user: user, body: "content2")
+
+      put :merge, merge_with: article1.id, article_id: article2.id
+      response.should redirect_to(:action => 'index')
 
     end
   end

@@ -466,4 +466,12 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
+
+  def self.merge(first_id, second_id)
+    article1 = Article.find_by_id(first_id)
+    article2 = Article.find_by_id(second_id)
+    article1.body += "\n" + article2.body
+    article1.save!
+    article2.delete
+  end
 end
