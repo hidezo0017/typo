@@ -633,9 +633,10 @@ describe Article do
 
   describe "merge similar articles" do
     before do
-      @article1 = Factory(:article, title: "first posted",
+      @merge_user = Factory(:user, profile_id: 1)
+      @article1 = Factory(:article, user_id: @merge_user.id, title: "first posted",
                          body: "first content")
-      @article2 = Factory(:article, title: "second posted",
+      @article2 = Factory(:article, user_id: @merge_user.id, title: "second posted",
                          body: "second content")
     end
     it "should have the text of the merged article" do
@@ -645,15 +646,10 @@ describe Article do
     end
     it "should have the comments of the merged article's comments" do
 
-      @comment1 = Factory(:comment)
-      @comment2 = Factory(:comment)
+      @cmt_user = Factory(:user, profile_id: 2)
+      @comment1 = Factory(:comment, user: @cmt_user, article:@article1)
+      @comment2 = Factory(:comment, user: @cmt_user, article:@article2)
 
-      @article1.comments << @comment1
-      @article2.comments << @comment2
-
-      debugger
-      @article1.save!
-      @article2.save!
       Article.merge(@article1.id, @article2.id)
       merged_article = Article.find_by_id(@article1.id)
       merged_article.comments.include?(@comment2).should be_true

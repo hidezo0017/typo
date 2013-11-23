@@ -116,6 +116,7 @@ class Admin::ContentController < Admin::BaseController
 
   #saasbook hw1
   def merge
+
     Article.merge(params[:merge_with], params[:article_id])
     redirect_to :action => 'index'
   end
